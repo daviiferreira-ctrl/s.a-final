@@ -1,0 +1,89 @@
+CREATE DATABASE IF NOT EXISTS vetket;
+USE vetket;
+
+CREATE TABLE usuario (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    permissao_funcao VARCHAR(15) NOT NULL
+);
+
+CREATE TABLE veterinario (
+    id_vet INT PRIMARY KEY,
+    nome VARCHAR(100),
+    especialidade VARCHAR(80),
+    hora_atendi TIME,
+    descricao VARCHAR(100)
+);
+
+CREATE TABLE pet (
+    id_pet INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    especie VARCHAR(100) NOT NULL,
+    foto_pet VARCHAR(200) NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE telefone (
+    id_tel INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    numero VARCHAR(50) NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE pet_adocao (
+    id_adocao INT AUTO_INCREMENT PRIMARY KEY,
+    nome_pet VARCHAR(100),
+    idade VARCHAR(30),
+    estado_saude TEXT,
+    contato_responsavel VARCHAR(100),
+    disponivel_no_site TINYINT(1),
+    id_usuario INT,
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+);
+
+CREATE TABLE consulta (
+    id_agendamento INT AUTO_INCREMENT PRIMARY KEY,
+    id_pet INT NOT NULL,
+    id_vet INT NOT NULL,
+    id_usuario INT NOT NULL,
+    local TEXT NOT NULL,
+    data DATE NOT NULL,
+    hora TIME NOT NULL,
+    descricao VARCHAR(100),
+    FOREIGN KEY (id_pet) REFERENCES pet(id_pet)
+    ON DELETE CASCADE,
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+    ON DELETE CASCADE,
+    FOREIGN KEY (id_vet) REFERENCES veterinario(id_vet)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+INSERT INTO usuario VALUES
+(1,'daada','adrielly@gmail.com','123456','cliente'),
+(2,'Davi Isaac Camara Ferreira','davi_i_ferreira@estudante.sesisenai.org.br','123456','cliente'),
+(3,'Bianca','','Bianca','cliente');
+
+INSERT INTO veterinario VALUES
+(0,'Sem Veterinário','Geral',NULL,NULL),
+(1,'Geral','Clínica Geral','08:00:00','Atendimento geral');
+
+INSERT INTO pet VALUES
+(1,1,'gato','6a3bd20c0b674_porquinho.webp'),
+(2,2,'gato','6a3bd3aca21db_chinchila.jpg'),
+(3,2,'dasd','6a3bd3cd8a5a2_coelho.jpg');
+
+INSERT INTO telefone VALUES
+(1,2,'12345678910'),
+(2,2,'12345678910'),
+(3,2,'123456789012');
+
+INSERT INTO consulta VALUES
+(1,1,1,1,'Clínica Principal','2026-06-12','12:46:00',NULL),
+(2,2,1,2,'Clínica Principal','2026-06-27','12:53:00',NULL),
+(3,3,1,2,'Clínica Principal','2026-06-04','11:56:00',NULL),
+(4,2,1,2,'Clínica Principal','2026-06-04','11:53:00',NULL);
